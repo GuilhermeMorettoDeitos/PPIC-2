@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulador: o golpe do falso leilão de Pix</title>
+<style>
+:root{--bg:#eef2f7;--fg:#13203a;--card:#ffffff;--mut:#4a5876;--line:#c9d3e3;--acc:#0b4fd6;--warn:#c4161c;--shell:#13203a;--shellfg:#ffffff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1424;--fg:#eef2fb;--card:#19233c;--mut:#aab6d3;--line:#2f3d62;--acc:#7fa8ff;--warn:#ff7b7b;--shell:#050914;--shellfg:#ffffff}}
+:root[data-theme="dark"]{--bg:#0e1424;--fg:#eef2fb;--card:#19233c;--mut:#aab6d3;--line:#2f3d62;--acc:#7fa8ff;--warn:#ff7b7b;--shell:#050914;--shellfg:#ffffff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:20px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+button{font:inherit;cursor:pointer}
+.sim{background:var(--shell);color:var(--shellfg);text-align:center;font-size:16px;padding:8px 12px;font-weight:600}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line);padding:10px 12px}
+.tabs{display:flex;gap:8px;max-width:760px;margin:0 auto 8px}
+.tabs button{flex:1;min-height:52px;border:2px solid var(--acc);background:transparent;color:var(--acc);border-radius:12px;font-weight:700}
+.tabs button.on{background:var(--acc);color:#fff}
+.det{display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto;min-height:48px;font-weight:700}
+.det input{width:28px;height:28px;accent-color:var(--warn)}
+main{max-width:760px;margin:0 auto;padding:16px 12px 40px}
+h2{font-size:24px;margin:0 0 8px}
+.intro{color:var(--mut);margin:0 0 16px}
+/* elementos "do golpe" — visual propositalmente exagerado */
+.scam{background:#0a0a14;color:#fff;border-radius:14px;overflow:hidden;border:3px solid #ffd600}
+.video{position:relative;height:200px;background:#14702c;overflow:hidden}
+.pitch{position:absolute;inset:-30px;background:repeating-linear-gradient(90deg,#17802f 0 40px,#1b8f35 40px 80px);transform:rotate(-8deg) skewX(-6deg)}
+.pitch::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;background:#ffffffaa}
+.pitch::after{content:"";position:absolute;left:50%;top:50%;width:90px;height:90px;margin:-45px;border:3px solid #ffffffaa;border-radius:50%}
+.live{position:absolute;top:8px;left:8px;background:#e50914;font-weight:800;font-size:15px;padding:2px 10px;border-radius:6px}
+.score{position:absolute;top:8px;right:8px;background:#000c;font-weight:700;font-size:15px;padding:2px 10px;border-radius:6px}
+.chan{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(90deg,#0033a0,#00a2ff);font-weight:800;font-size:15px;padding:5px 10px}
+.promo{background:linear-gradient(135deg,#ffd600,#ff8a00);color:#1a0000;text-align:center;padding:14px 10px}
+.promo b.big{display:block;font-size:30px;line-height:1.1;font-weight:900;text-shadow:1px 1px 0 #fff8}
+.promo p{margin:6px 0 0;font-weight:800;font-size:18px}
+.timer{display:inline-block;background:#1a0000;color:#ffd600;font:800 30px/1 ui-monospace,Menlo,Consolas,monospace;padding:8px 14px;border-radius:10px;margin-top:8px}
+.pix{display:flex;gap:12px;align-items:center;padding:14px;background:#08331f;border-top:3px dashed #3ddc84}
+.qr{display:grid;grid-template-columns:repeat(21,1fr);width:112px;height:112px;background:#fff;padding:5px;flex:none}
+.qr i{background:#fff}.qr i.k{background:#000}
+.pix small{color:#9be7bd;display:block;font-size:14px}
+.pix b{font-size:19px;word-break:break-all}
+.stats{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#1b0a3a}
+.stats div{flex:1 1 140px;text-align:center;background:#2e1466;border-radius:10px;padding:8px 6px;font-size:15px;font-weight:700}
+.stats div b{display:block;font-size:26px;color:#ffd600;line-height:1.1}
+.receipt{margin:12px;background:#fff;color:#111;border-radius:10px;padding:10px 14px;font-size:16px;border-left:8px solid #1fa34a}
+.receipt b{color:#1fa34a}
+.rev{padding:4px 12px 12px}
+.rev h3{margin:8px 0;font-size:20px;color:#ffd600}
+.r{background:#fff;color:#111;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:16px;display:flex;gap:10px}
+.r .av{flex:none;width:42px;height:42px;border-radius:50%;background:#cfd8ff;display:grid;place-items:center;font-size:22px}
+.r .st{color:#f5a300;letter-spacing:2px}
+.chat{margin:0 12px 12px;background:#12121f;border-radius:10px;padding:10px;height:150px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;font-size:15px}
+.chat p{margin:2px 0}.chat span{color:#8fb4ff;font-weight:700}
+.cta{display:block;width:calc(100% - 24px);margin:0 12px 14px;min-height:64px;border:0;border-radius:14px;background:#16c05a;color:#fff;font-weight:900;font-size:24px;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{transform:scale(1.03)}}
+@media (prefers-reduced-motion:reduce){.cta{animation:none}}
+/* e-mail */
+.mail{background:var(--card);border:2px solid var(--line);border-radius:14px;overflow:hidden}
+.mh{padding:14px;border-bottom:2px solid var(--line);font-size:17px}
+.mh div{margin:2px 0}.mh span{color:var(--mut)}
+.mb{padding:16px}
+.mb .logo{display:inline-block;background:#0033a0;color:#fff;font-weight:900;padding:4px 14px;border-radius:6px;margin-bottom:12px}
+.mb .btn{display:block;width:100%;min-height:60px;border:0;border-radius:10px;background:#e50914;color:#fff;font-weight:900;font-size:22px;margin:14px 0}
+.mb .urg{background:#fff3cd;color:#5a3a00;border:2px solid #ffc107;border-radius:8px;padding:8px 12px;font-weight:700}
+.foot{font-size:14px;color:var(--mut);margin-top:10px}
+/* modo detetive */
+[data-f]{position:relative}
+body.det [data-f]{outline:4px dashed var(--warn);outline-offset:-4px;cursor:help}
+body.det [data-f]::before{content:attr(data-n);position:absolute;z-index:5;top:2px;left:2px;min-width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:var(--warn);color:#fff;font:800 18px/1 system-ui;box-shadow:0 0 0 3px #fff}
+.rules{margin-top:20px;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 18px}
+.rules h2{font-size:22px}.rules li{margin:6px 0}
+/* modal / sheet */
+.ov{position:fixed;inset:0;z-index:50;background:#000a;display:none;align-items:flex-end;justify-content:center}
+.ov.on{display:flex}
+.box{background:var(--card);color:var(--fg);width:100%;max-width:640px;max-height:90vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.box h3{font-size:24px;margin:0 0 8px}
+.amts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.amts button{min-height:64px;border:2px solid var(--acc);background:transparent;color:var(--acc);border-radius:12px;font-weight:800;font-size:22px}
+.btn2{display:block;width:100%;min-height:56px;border:0;border-radius:12px;background:var(--acc);color:#fff;font-weight:800;margin-top:10px}
+.btn2.alt{background:transparent;color:var(--acc);border:2px solid var(--acc)}
+.bad{color:var(--warn)}
+.spin{width:48px;height:48px;border:6px solid var(--line);border-top-color:var(--acc);border-radius:50%;margin:20px auto;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+button:focus-visible,input:focus-visible{outline:4px solid #ff9f1c;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="sim">🎓 SIMULAÇÃO EDUCATIVA: nada aqui é real. Não há dinheiro, marca real nem coleta de dados.</div>
+<div class="bar">
+  <div class="tabs" role="tablist">
+    <button class="on" data-t="live" role="tab">1. A transmissão</button>
+    <button data-t="mail" role="tab">2. O e-mail</button>
+  </div>
+  <label class="det"><input type="checkbox" id="det"> 🔍 Modo detetive: mostrar os sinais de golpe</label>
+</div>
+
+<main>
+<section id="live">
+  <h2>Você está assistindo ao jogo…</h2>
+  <p class="intro">Veja como se fosse você, em casa. Quando estiver pronto, toque no botão verde.</p>
+  <div class="scam">
+    <div class="video" data-f="img">
+      <div class="pitch"></div>
+      <span class="live">● AO VIVO</span><span class="score">Time A 1 × 0 Time B</span>
+      <div class="chan" data-f="marca">REDE AURORA · JOGÃO DA RODADA · TRANSMISSÃO OFICIAL</div>
+    </div>
+    <div class="promo" data-f="promessa">
+      <b class="big">🏆 SUPER BÔNUS 🏆</b>
+      <p>O MAIOR PIX LEVA R$ 7.000 + SEU DINHEIRO DE VOLTA!</p>
+      <div class="timer" data-f="tempo" id="tm">14:59</div>
+    </div>
+    <div class="pix" data-f="pix">
+      <div class="qr" id="qr" aria-hidden="true"></div>
+      <div><small>QR e chave fictícios</small><b>Chave Pix: 000.000.000-00</b><small>Pague agora e concorra ao vivo!</small></div>
+    </div>
+    <div class="stats">
+      <div data-f="num"><b>+5 MILHÕES</b>de premiados por ano</div>
+      <div data-f="selo"><b>100%</b>seguro e verificado ✅</div>
+      <div><b>98%</b>de satisfação</div>
+    </div>
+    <div class="receipt" data-f="comp"><b>✔ Pix enviado ao ganhador!</b><br>R$ 7.000,00 para Carlos M. · Banco Horizonte · 14:32</div>
+    <div class="rev" data-f="aval">
+      <h3>⭐ O que dizem os ganhadores</h3>
+      <div class="r"><div class="av">👵</div><div><span class="st">★★★★★</span><br><b>Maria S., 62 anos, Campinas</b><br>"Recebi na hora, nem acreditei! Já mandei pra minha filha."</div></div>
+      <div class="r"><div class="av">👨</div><div><span class="st">★★★★★</span><br><b>José A., 58 anos, Recife</b><br>"Ganhei R$ 3.000 no intervalo. Super confiável!!"</div></div>
+    </div>
+    <div class="chat" id="chat" data-f="chat"></div>
+    <button class="cta" id="go">QUERO PARTICIPAR!</button>
+  </div>
+</section>
+
+<section id="mail" hidden>
+  <h2>Chegou este e-mail…</h2>
+  <p class="intro">Golpistas também mandam o "prêmio" por e-mail ou WhatsApp. Leia como se fosse seu.</p>
+  <div class="mail">
+    <div class="mh">
+      <div data-f="rem"><span>De:</span> <b>Rede Aurora Prêmios</b> &lt;premios@rede-aurora-bonus.top&gt;</div>
+      <div><span>Para:</span> você</div>
+      <div data-f="assunto"><span>Assunto:</span> <b>🎉 PARABÉNS!!! Você foi sorteado(a) – R$ 3.500 esperando</b></div>
+    </div>
+    <div class="mb">
+      <span class="logo">REDE AURORA</span>
+      <p data-f="saud"><b>Prezado(a) cliente,</b></p>
+      <p>Você foi <b>selecionado(a)</b> entre milhões de telespectadores no sorteio especial do Jogão da Rodada!</p>
+      <div class="urg" data-f="prazo">⏰ Você tem apenas 2 horas para resgatar, ou o prêmio vai para outra pessoa!</div>
+      <button class="btn" id="mailbtn" data-f="taxa">RESGATAR MEU PRÊMIO AGORA</button>
+      <p>Para liberar o valor, basta confirmar seus dados e pagar a <b>taxa de liberação de R$ 49,90</b>, que será devolvida junto com o prêmio.</p>
+      <p class="foot" data-f="rodape">Rede Aurora S.A. · CNPJ 00.000.000/0001-00 (fictício) · Não responda este e-mail. Prêmios não resgatados serão perdidos pro sempre.</p>
+    </div>
+  </div>
+</section>
+
+<div class="rules">
+  <h2>As 4 regras de ouro</h2>
+  <ol>
+    <li>Quem dá prêmio <b>nunca pede dinheiro antes</b>.</li>
+    <li>Pressa e contagem regressiva são <b>truques</b>. Pare e respire.</li>
+    <li>Nome de empresa famosa na tela <b>não prova nada</b>. Qualquer um copia.</li>
+    <li>Na dúvida, <b>não pague</b>. Ligue para alguém da família ou para o seu banco.</li>
+  </ol>
+</div>
+</main>
+
+<div class="ov" id="ov"><div class="box" id="box"></div></div>
+
+<script>
+const F={
+img:["Imagem torta ou distorcida","A imagem é entortada de propósito. Serve para o vídeo escapar dos bloqueios automáticos e para criar a sensação de que 'só melhora se você pagar'. Transmissão oficial não faz isso."],
+marca:["Nome de emissora na tela","Golpistas usam nomes e logos famosos (emissoras, bancos, casas de apostas) para parecer confiáveis. Aqui a marca é inventada, mas na vida real pode parecer uma marca conhecida. Quem retransmite o jogo sem autorização já é pirata."],
+promessa:["Promessa boa demais","'Maior Pix leva R$ 7.000 e ainda recebe o dinheiro de volta.' Nenhum negócio real ganha dinheiro assim. O 'prêmio' é inventado e todo Pix recebido vira lucro do golpista."],
+tempo:["Contagem regressiva","A pressa serve para você não pensar nem perguntar a ninguém. Quando o tempo acaba, o relógio recomeça: o golpe repete a rodada várias vezes no mesmo jogo."],
+pix:["Pix para uma chave qualquer","Pix cai direto na conta de quem recebe, em segundos. Se a chave é de uma pessoa ou de um número de telefone, e não de uma empresa conhecida, desconfie. O dinheiro depois é muito difícil de recuperar."],
+num:["Número impressionante e inventado","'+5 milhões de premiados por ano' não tem fonte nem prova. Números grandes servem só para passar confiança."],
+selo:["Selo de 'seguro'","Qualquer pessoa pode desenhar um selo de 'verificado'. Segurança de verdade vem do banco ou do app oficial, não de um desenho na tela."],
+comp:["Comprovante falso","Mostrar um 'Pix enviado ao ganhador' é fácil de fabricar. É para você acreditar que os outros já ganharam."],
+aval:["Avaliações de pessoas que não existem","Nomes, fotos e elogios criados pelo golpista. Opinião de desconhecido na própria página do golpe não vale como prova."],
+chat:["Comentários falsos","Mensagens do tipo 'recebi!' podem ser escritas por robôs ou pelo próprio golpista, para criar a sensação de que todo mundo está ganhando."],
+rem:["Endereço de e-mail estranho","O nome diz 'Rede Aurora', mas o endereço termina em '.top' e não é o site oficial. Olhe sempre o endereço entre os sinais < >, não só o nome."],
+assunto:["Assunto exagerado","Muitos '!!!' e emojis, e um prêmio que você nunca disputou. Ninguém ganha sorteio de que não participou."],
+saud:["Tratamento genérico","'Prezado cliente' porque o golpista não sabe seu nome. Empresas de verdade usam seus dados reais."],
+prazo:["Prazo curtíssimo","Mesma pressa da transmissão: 2 horas para você não consultar ninguém."],
+taxa:["Taxa para liberar o prêmio","Esse é o centro do golpe. Prêmio de verdade não exige pagamento antecipado. A promessa de 'devolver a taxa' é parte da isca."],
+rodape:["Rodapé com erros e dados falsos","Erros de português e CNPJ que não confere (pesquise no site da Receita Federal) mostram que a empresa não existe."]
+};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+// QR fictício
+(function(){const q=$('#qr');let h='';const fin=(r,c)=>[[0,0],[0,14],[14,0]].some(([a,b])=>r>=a&&r<a+7&&c>=b&&c<b+7);
+for(let r=0;r<21;r++)for(let c=0;c<21;c++){let k;if(fin(r,c)){const rr=r%14,cc=c%14;k=(rr==0||rr==6||cc==0||cc==6||(rr>=2&&rr<=4&&cc>=2&&cc<=4))?1:0}else k=Math.random()>.5?1:0;h+='<i'+(k?' class="k"':'')+'></i>'}
+q.innerHTML=h})();
+// contagem regressiva que reinicia
+let t=14*60+59;setInterval(()=>{t=t<=0?14*60+59:t-1;$('#tm').textContent=String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')},1000);
+// chat falso
+const msgs=[["Ana_77","RECEBI!!! 🙌🙌"],["torcedor_fiel","mandei R$50 e tô esperando kkk"],["Dona Lúcia","é verdade mesmo?"],["Bruno10","SIM! ganhei semana passada!!"],["promo_oficial","Quem ofertar mais agora leva R$ 7.000!"],["Marcos_RJ","vou mandar 100, quero ganhar"],["Cléo","aprovado, é seguro ✅"],["Tião","mandei agora, valeu"]];
+let mi=0;function addMsg(){const c=$('#chat'),[n,m]=msgs[mi++%msgs.length];const p=document.createElement('p');p.innerHTML='<span></span> <em></em>';p.firstChild.textContent=n+':';p.lastChild.textContent=m;c.appendChild(p);while(c.children.length>6)c.removeChild(c.firstChild)}
+addMsg();addMsg();setInterval(addMsg,2200);
+// abas
+$$('.tabs button').forEach(b=>b.onclick=()=>{$$('.tabs button').forEach(x=>x.classList.toggle('on',x===b));$('#live').hidden=b.dataset.t!=='live';$('#mail').hidden=b.dataset.t!=='mail';numberFlags()});
+// modo detetive
+function numberFlags(){let n=0;$$('main section:not([hidden]) [data-f]').forEach(e=>e.dataset.n=++n)}
+$('#det').onchange=e=>{document.body.classList.toggle('det',e.target.checked);numberFlags()};
+function setDet(on){$('#det').checked=on;document.body.classList.toggle('det',on);numberFlags()}
+// overlay
+const ov=$('#ov'),box=$('#box');
+function open(h){box.innerHTML=h;ov.classList.add('on')}
+function close(){ov.classList.remove('on')}
+ov.onclick=e=>{if(e.target===ov)close()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+document.addEventListener('click',e=>{if(!document.body.classList.contains('det'))return;const el=e.target.closest('[data-f]');if(!el||e.target.closest('#ov'))return;e.preventDefault();const[ti,tx]=F[el.dataset.f];open('<h3>🚩 '+ti+'</h3><p>'+tx+'</p><button class="btn2" onclick="close()">Entendi</button>')},true);
+// fluxo de pagamento simulado
+$('#go').onclick=()=>open('<h3>Quanto você quer ofertar?</h3><p>Quanto maior o valor, maior a chance de ser o <b>maior Pix</b>!</p><div class="amts">'+[20,50,100,200].map(v=>'<button onclick="pay('+v+')">R$ '+v+'</button>').join('')+'</div><p class="foot" style="color:var(--mut);font-size:16px">Simulação: nenhum valor será cobrado.</p>');
+$('#mailbtn').onclick=()=>open('<h3>Confirmar pagamento da taxa</h3><p>Taxa de liberação: <b>R$ 49,90</b></p><button class="btn2" onclick="pay(49.9)">Pagar taxa (simulado)</button><button class="btn2 alt" onclick="close()">Voltar</button>');
+window.pay=v=>{const f=v.toFixed(2).replace('.',',');open('<h3>Processando Pix…</h3><div class="spin"></div><p style="text-align:center">Aguarde, confirmando sua oferta.</p>');
+setTimeout(()=>open('<h3 class="bad">😔 Era um golpe (de mentirinha)</h3><p>Você "enviou" <b>R$ '+f+'</b>. Na vida real, o que acontece é:</p><ol><li>O dinheiro foi <b>direto para o golpista</b>.</li><li>O "ganhador" era <b>falso</b>. Ninguém recebe prêmio.</li><li>A transmissão <b>some</b> quando o jogo acaba.</li><li>Recuperar o valor é <b>muito difícil</b>. Se acontecer, ligue para o banco na hora.</li></ol><button class="btn2" onclick="close();setDet(true);scrollTo({top:0,behavior:\'smooth\'})">🔍 Ver os sinais que denunciavam o golpe</button><button class="btn2 alt" onclick="close();setDet(false)">Recomeçar</button>'),1800)};
+numberFlags();
+</script>
+</body>
+</html>
