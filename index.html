@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#001b4d">
   <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
   <title>Golpe do Pix — Orientação e Simulador</title>
 
   <style>
@@ -563,26 +564,6 @@
       font-weight: 800;
     }
 
-    .simulador-tabs {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-    }
-
-    .simulador-tabs button {
-      min-height: 48px;
-      border: 2px solid var(--acc);
-      background: transparent;
-      color: var(--acc);
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: .95rem;
-      padding: 0 4px;
-    }
-
-    .simulador-tabs button.on { background: var(--acc); color: #fff; }
-
     .detetive-linha {
       display: flex;
       align-items: center;
@@ -894,97 +875,6 @@
 
     @keyframes pulse { 50% { transform: scale(1.03); } }
 
-    /* ----- WhatsApp ----- */
-
-    .zap { border: 2px solid var(--line); border-radius: 14px; overflow: hidden; background: #ece5dd; }
-
-    .zap-head {
-      display: flex; align-items: center; gap: 10px;
-      background: #075e54; color: #fff;
-      padding: 10px 12px;
-    }
-
-    .zap-head .foto {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: #b5c3c0; display: grid; place-items: center;
-      font-size: 1.4rem; flex: none;
-    }
-
-    .zap-head small { display: block; opacity: .85; }
-
-    .zap-aviso {
-      background: #fff3c4; color: #4a3a00;
-      font-size: .9rem; padding: 8px 12px; text-align: center;
-    }
-
-    .zap-body {
-      min-height: 260px;
-      padding: 12px 10px;
-      display: flex; flex-direction: column; gap: 8px;
-    }
-
-    .bolha {
-      max-width: 85%;
-      padding: 8px 12px;
-      border-radius: 10px;
-      background: #fff;
-      color: #111;
-      box-shadow: 0 1px 1px #0003;
-      align-self: flex-start;
-      font-size: 1rem;
-    }
-
-    .bolha.eu { background: #dcf8c6; align-self: flex-end; }
-    .bolha small { display: block; text-align: right; color: #667; font-size: .75rem; }
-
-    .digitando {
-      align-self: flex-start;
-      background: #fff; border-radius: 10px; padding: 8px 14px;
-      color: #667; font-weight: 800; letter-spacing: 3px;
-    }
-
-    .zap-resp { padding: 10px; background: #f6f6f6; display: grid; gap: 8px; }
-
-    .zap-resp button {
-      min-height: 54px;
-      border: 2px solid #075e54;
-      background: #fff;
-      color: #075e54;
-      border-radius: 12px;
-      font-weight: 800;
-      padding: 8px 10px;
-      text-align: left;
-    }
-
-    /* ----- E-mail ----- */
-
-    .mail { background: var(--card); border: 2px solid var(--line); border-radius: 14px; overflow: hidden; }
-    .mh { padding: 12px 14px; border-bottom: 2px solid var(--line); font-size: 1rem; overflow-wrap: anywhere; }
-    .mh div { margin: 2px 0; }
-    .mh span { color: var(--mut); }
-    .mb { padding: 14px; }
-
-    .mb .logo {
-      display: inline-block;
-      background: #0033a0; color: #fff;
-      font-weight: 900; padding: 4px 14px;
-      border-radius: 6px; margin-bottom: 10px;
-    }
-
-    .mb .btn-mail {
-      display: block; width: 100%; min-height: 60px;
-      border: 0; border-radius: 10px;
-      background: #e50914; color: #fff;
-      font-weight: 900; font-size: 1.15rem;
-      margin: 14px 0;
-    }
-
-    .mb .urg {
-      background: #fff3cd; color: #5a3a00;
-      border: 2px solid #ffc107;
-      border-radius: 8px; padding: 8px 12px; font-weight: 700;
-    }
-
     .foot { font-size: .85rem; color: var(--mut); margin-top: 10px; }
 
     /* ----- Modo detetive ----- */
@@ -1016,13 +906,6 @@
     }
 
     body.modo-detetive [data-f].achado::before { background: var(--verde); content: "✓"; }
-
-    body.modo-detetive .bolha[data-f]::before,
-    body.modo-detetive .mail [data-f]::before {
-      top: -12px;
-      left: -8px;
-    }
-    body.modo-detetive .bolha[data-f] { margin-top: 10px; margin-left: 6px; }
 
     .rules {
       margin-top: 18px;
@@ -1154,10 +1037,7 @@
 
     @media (max-width: 520px) {
       .pix { flex-direction: column; align-items: flex-start; }
-      .barra-linha { flex-direction: column; }
-      .simulador-tabs { flex: none; }
       .voltar { min-height: 44px; }
-      .simulador-tabs button { font-size: .85rem; }
       .quiz .opcoes { grid-template-columns: 1fr; }
     }
 
@@ -1330,8 +1210,8 @@
       <section class="game-button-section">
         <h2>Quer aprender de forma interativa?</h2>
         <p>
-          Entre em uma live suspeita, receba uma mensagem falsa de “parente” no
-          WhatsApp e veja um e-mail de falso prêmio. Descubra os sinais um a um.
+          Entre em uma live suspeita, toque nos sinais de golpe e descubra
+          um a um como os criminosos enganam.
         </p>
         <button class="botao-jogo" data-abrir-sim id="abrir-simulador">
           🎮 Abrir simulador do golpe
@@ -1427,12 +1307,6 @@
     <div class="simulador-barra">
       <div class="barra-linha">
         <button class="voltar" id="voltar-principal">← Voltar</button>
-
-        <div class="simulador-tabs" role="tablist">
-          <button class="on" data-t="live" role="tab">📺 1. Live</button>
-          <button data-t="zap" role="tab">💬 2. WhatsApp</button>
-          <button data-t="mail" role="tab">✉️ 3. E-mail</button>
-        </div>
       </div>
 
       <div class="detetive-linha">
@@ -1446,7 +1320,7 @@
 
     <main class="simulador-conteudo">
 
-      <!-- ===== 1. LIVE ===== -->
+      <!-- ===== LIVE ===== -->
       <section id="live">
         <h2>Você está assistindo ao jogo…</h2>
         <p class="intro">
@@ -1535,85 +1409,6 @@
           <div class="social abs" data-f="social" id="social">🔔 Ana acabou de ofertar R$ 50</div>
 
           <button class="cta" id="go">QUERO PARTICIPAR!</button>
-        </div>
-      </section>
-
-      <!-- ===== 2. WHATSAPP ===== -->
-      <section id="zap" hidden>
-        <h2>Chegou uma mensagem…</h2>
-        <p class="intro">
-          Esse golpe usa o <b>medo e o carinho</b>: o criminoso finge ser seu filho,
-          neto ou sobrinho. Acompanhe a conversa e escolha como responder.
-        </p>
-
-        <div class="zap">
-          <div class="zap-head" data-f="zfoto">
-            <div class="foto">👤</div>
-            <div>
-              <b>Filho (novo número)</b>
-              <small>+55 11 9xxxx-0000 · nome e foto copiados</small>
-            </div>
-          </div>
-          <div class="zap-aviso">Conversa fictícia para fins educativos.</div>
-          <div class="zap-body" id="zap-body"></div>
-          <div class="zap-resp" id="zap-resp" hidden>
-            <button data-r="pagar">💸 Fazer o Pix, é meu filho!</button>
-            <button data-r="ligar">📞 Ligar para o número antigo dele</button>
-            <button data-r="pergunta">❓ Fazer uma pergunta que só ele saberia</button>
-          </div>
-        </div>
-        <button class="btn alt" id="zap-reiniciar" hidden>↺ Rever a conversa</button>
-      </section>
-
-      <!-- ===== 3. E-MAIL ===== -->
-      <section id="mail" hidden>
-        <h2>Chegou este e-mail…</h2>
-        <p class="intro">
-          Golpistas também mandam o "prêmio" por e-mail, SMS ou WhatsApp.
-          Leia como se fosse seu.
-        </p>
-
-        <div class="mail">
-          <div class="mh">
-            <div data-f="rem">
-              <span>De:</span> <b>Rede Aurora Prêmios</b>
-              &lt;premios@rede-aurora-bonus.top&gt;
-            </div>
-            <div><span>Para:</span> você</div>
-            <div data-f="assunto">
-              <span>Assunto:</span>
-              <b>🎉 PARABÉNS!!! Você foi sorteado(a) – R$ 3.500 esperando</b>
-            </div>
-          </div>
-
-          <div class="mb">
-            <span class="logo">REDE AURORA</span>
-
-            <p data-f="saud"><b>Prezado(a) cliente,</b></p>
-
-            <p>
-              Você foi <b>selecionado(a)</b> entre milhões de telespectadores
-              no sorteio especial do Jogão da Rodada!
-            </p>
-
-            <div class="urg" data-f="prazo">
-              ⏰ Você tem apenas 2 horas para resgatar, ou o prêmio vai para outra pessoa!
-            </div>
-
-            <button class="btn-mail" id="mailbtn" data-f="taxa">
-              RESGATAR MEU PRÊMIO AGORA
-            </button>
-
-            <p>
-              Para liberar o valor, basta confirmar seus dados e pagar a
-              <b>taxa de liberação de R$ 49,90</b>, que será devolvida junto com o prêmio.
-            </p>
-
-            <p class="foot" data-f="rodape">
-              Rede Aurora S.A. · CNPJ 00.000.000/0001-00 (fictício) · Não
-              responda este e-mail. Prêmios não resgatados serão perdidos.
-            </p>
-          </div>
         </div>
       </section>
 
@@ -1894,22 +1689,7 @@
       aval: ["Avaliações suspeitas", "Nomes, fotos e elogios podem ser criados pelo próprio golpista."],
       doacao: ["Ofertas “ao vivo” falsas", "As ofertas que aparecem em destaque são geradas por programa para você achar que todos estão pagando."],
       chat: ["Comentários falsos", "Mensagens como “eu recebi” podem vir de robôs ou do próprio golpista, para criar a sensação de que todos estão ganhando."],
-      social: ["Aviso de “fulano acabou de ofertar”", "Pop-ups de movimentação são fabricados para você sentir que está ficando para trás."],
-
-      zfoto: ["Número novo, foto e nome copiados", "O golpista copia a foto e o nome do seu parente das redes sociais. Mensagem de número desconhecido pedindo para salvar o contato é o início do golpe."],
-      znum: ["“Mudei de número”", "É a desculpa para você não reconhecer o número e não poder conferir com o contato antigo."],
-      zurg: ["Problema urgente inventado", "Boleto atrasado, app bloqueado, acidente… sempre uma emergência que exige pressa."],
-      zpix: ["Pedido de Pix", "Parente de verdade que muda de número conversa, liga e se identifica. Pedir dinheiro logo na primeira conversa é alerta máximo."],
-      zterc: ["Conta de uma terceira pessoa", "O Pix é para o nome de um “colega”, que é a conta do golpista (ou de um laranja). Nome diferente do parente: desconfie."],
-      znoligar: ["“Não posso ligar”", "O golpista foge de ligação e de áudio, porque a voz o denunciaria."],
-      zsegredo: ["Pedido de segredo", "“Não conta pro pai” serve para você não ouvir uma segunda opinião."],
-
-      rem: ["Endereço de e-mail estranho", "O nome pode parecer oficial, mas o endereço termina em um domínio estranho (.top) e diferente do site da empresa."],
-      assunto: ["Assunto exagerado", "Muitos sinais de exclamação, emojis e um prêmio que você nunca disputou: fraude."],
-      saud: ["Tratamento genérico", "Empresas legítimas usam seu nome. “Prezado cliente” serve para qualquer vítima."],
-      prazo: ["Prazo curtíssimo", "O prazo limitado impede que você consulte família, banco ou canais oficiais."],
-      taxa: ["Taxa para liberar o prêmio", "É o centro do golpe. Prêmios verdadeiros não exigem pagamento antecipado."],
-      rodape: ["Rodapé com dados falsos", "CNPJ que não confere, “não responda” e ameaça de perder o prêmio são sinais de empresa inexistente."]
+      social: ["Aviso de “fulano acabou de ofertar”", "Pop-ups de movimentação são fabricados para você sentir que está ficando para trás."]
     };
 
     /* ---------- Modo detetive ---------- */
@@ -1917,7 +1697,7 @@
     const achados = new Set();
 
     function secaoVisivel() {
-      return $$(".simulador-conteudo section").find(s => !s.hidden);
+      return $("#live");
     }
 
     function numerarSinais() {
@@ -1990,20 +1770,6 @@
         <button class="btn-modal" onclick="fecharModal()">Entendi</button>
       `);
     }, true);
-
-    /* ---------- Abas ---------- */
-
-    $$(".simulador-tabs button").forEach(botao => {
-      botao.addEventListener("click", () => {
-        $$(".simulador-tabs button").forEach(b => b.classList.toggle("on", b === botao));
-        ["live", "zap", "mail"].forEach(id => {
-          $("#" + id).hidden = botao.dataset.t !== id;
-        });
-        if (botao.dataset.t === "zap" && !zapIniciado) iniciarZap();
-        window.scrollTo(0, 0);
-        numerarSinais();
-      });
-    });
 
     /* ---------- QR fictício ---------- */
 
@@ -2086,92 +1852,13 @@
       $("#doacao").querySelector("b").textContent = `${n} ofertou R$ ${v}`;
     }, 4200);
 
-    /* ---------- WhatsApp ---------- */
-
-    const mensagensZap = [
-      { t: "Oi mãe! Mudei de número, o outro caiu na água 😅", f: "znum" },
-      { t: "Salva esse aí" },
-      { t: "Mãe, tô numa enrascada. Tenho que pagar um boleto hoje e meu app do banco bloqueou.", f: "zurg" },
-      { t: "Consegue fazer um Pix pra mim? R$ 890. Te devolvo amanhã, juro!", f: "zpix" },
-      { t: "É pra conta de um colega: Rafael T. Andrade. Manda o comprovante aqui.", f: "zterc" },
-      { t: "Não dá pra ligar agora, tô em reunião. Só por mensagem!", f: "znoligar" },
-      { t: "Por favor, é urgente 🙏 não conta pro pai", f: "zsegredo" }
-    ];
-
-    let zapIniciado = false;
-    let zapTimers = [];
-
-    function iniciarZap() {
-      zapIniciado = true;
-      zapTimers.forEach(clearTimeout);
-      zapTimers = [];
-      const corpo = $("#zap-body");
-      corpo.innerHTML = "";
-      $("#zap-resp").hidden = true;
-      $("#zap-reiniciar").hidden = true;
-
-      let atraso = 600;
-      mensagensZap.forEach((m, i) => {
-        zapTimers.push(setTimeout(() => {
-          const dig = document.createElement("div");
-          dig.className = "digitando";
-          dig.textContent = "•••";
-          corpo.appendChild(dig);
-        }, atraso));
-        atraso += 1100;
-        zapTimers.push(setTimeout(() => {
-          corpo.querySelector(".digitando")?.remove();
-          const b = document.createElement("div");
-          b.className = "bolha";
-          if (m.f) b.dataset.f = m.f;
-          b.append(m.t);
-          const hora = document.createElement("small");
-          hora.textContent = `14:${String(10 + i).padStart(2, "0")}`;
-          b.appendChild(hora);
-          corpo.appendChild(b);
-          numerarSinais();
-          if (i === mensagensZap.length - 1) {
-            $("#zap-resp").hidden = false;
-            $("#zap-reiniciar").hidden = false;
-          }
-        }, atraso));
-        atraso += 300;
-      });
-    }
-
-    $("#zap-reiniciar").addEventListener("click", iniciarZap);
-
-    $$("#zap-resp button").forEach(b =>
-      b.addEventListener("click", () => {
-        const r = b.dataset.r;
-        if (r === "pagar") {
-          abrirBanco({ ctx: "zap", valor: 890 });
-        } else if (r === "ligar") {
-          abrirModal(`
-            <h3 class="good">🎉 Excelente decisão!</h3>
-            <p>Você ligou para o número antigo e seu filho atendeu: <b>ele nunca mudou de número</b>. O golpe foi descoberto antes de qualquer prejuízo.</p>
-            <p><b>Faça isso sempre:</b> ligue para o número que você já tinha ou fale com outro parente.</p>
-            <button class="btn-modal bom" onclick="fecharModal()">Continuar</button>`);
-        } else {
-          abrirModal(`
-            <h3 class="good">👏 Boa ideia!</h3>
-            <p>Você perguntou: “Qual o nome do nosso cachorro?”. O golpista <b>respondeu errado</b> e depois insistiu: “mãe, não tenho tempo para isso, faz o Pix!”.</p>
-            <p>Quando a pessoa foge da pergunta e aumenta a pressa, é golpe. Bloqueie e denuncie o número.</p>
-            <button class="btn-modal bom" onclick="fecharModal()">Continuar</button>`);
-        }
-      })
-    );
-
     /* ---------- Fluxo bancário fictício ---------- */
 
     const recebedores = {
-      live: { nome: "João Pedro S. Moreira", doc: "•••.482.917-••", banco: "Banco Nova Via (fictício)", pede: "Rede Aurora" },
-      mail: { nome: "M. C. Distribuidora Ltda", doc: "••.381.•••/0001-••", banco: "Banco Nova Via (fictício)", pede: "Rede Aurora" },
-      zap: { nome: "Rafael T. Andrade", doc: "•••.730.215-••", banco: "Banco Nova Via (fictício)", pede: "seu filho" }
+      live: { nome: "João Pedro S. Moreira", doc: "•••.482.917-••", banco: "Banco Nova Via (fictício)", pede: "Rede Aurora" }
     };
 
     let perdido = 0;
-    let rodada = 0;
 
     function abrirBanco({ ctx, valor, extra }) {
       const r = recebedores[ctx];
@@ -2201,7 +1888,7 @@
     function cancelarPix(ctx) {
       abrirModal(`
         <h3 class="good">🏅 Parabéns, você escapou!</h3>
-        <p>O nome do recebedor <b>não bate</b> com o de quem prometeu o prêmio (ou com o do seu parente). Cancelar na tela de confirmação é a última chance de evitar o golpe — e você a usou.</p>
+        <p>O nome do recebedor <b>não bate</b> com o de quem prometeu o prêmio. Cancelar na tela de confirmação é a última chance de evitar o golpe — e você a usou.</p>
         <p><b>Dica:</b> o recebedor aparece <u>antes</u> de você digitar a senha. Sempre leia.</p>
         <button class="btn-modal" onclick="fecharModal(); ativarModoDetetive(true)">🔍 Ver os sinais que denunciavam</button>
         <button class="btn-modal alternativo" onclick="fecharModal()">Fechar</button>`);
@@ -2222,15 +1909,6 @@
         <button class="btn-modal alternativo" onclick="fecharModal()">Voltar</button>`);
     });
 
-    $("#mailbtn").addEventListener("click", () => {
-      perdido = 0;
-      abrirModal(`
-        <h3>Confirmar pagamento da taxa</h3>
-        <p>Taxa de liberação: <b>R$ 49,90</b></p>
-        <button class="btn-modal" onclick="abrirBanco({ctx:'mail', valor:49.90})">Pagar taxa — simulado</button>
-        <button class="btn-modal alternativo" onclick="fecharModal()">Voltar</button>`);
-    });
-
     window.pagarSimulado = (valor, ctx, extra) => {
       perdido += valor;
       abrirModal(`
@@ -2244,13 +1922,8 @@
           return;
         }
         /* Escalada: a segunda cobrança, típica dos golpes reais */
-        const taxa = ctx === "zap" ? 450 : ctx === "mail" ? 149.9 : 150;
-        const motivo =
-          ctx === "zap"
-            ? "“Mãe, deu erro no boleto. O banco pede mais R$ 450 para estornar. Faz de novo?”"
-            : ctx === "mail"
-            ? "“Houve uma falha. Para confirmar sua identidade, pague mais R$ 149,90. Tudo será devolvido.”"
-            : "“Seu Pix entrou em análise! Para liberar o prêmio, pague a taxa de saque de R$ 150,00.”";
+        const taxa = 150;
+        const motivo = "“Seu Pix entrou em análise! Para liberar o prêmio, pague a taxa de saque de R$ 150,00.”";
         abrirModal(`
           <h3>⚠️ Mensagem recebida</h3>
           <div class="dica">${motivo}</div>
@@ -2263,7 +1936,6 @@
     };
 
     window.revelar = (ctx, pagouMais) => {
-      rodada++;
       const total = dinheiro(perdido);
       abrirModal(`
         <h3 class="bad">😔 Era um golpe — de mentirinha</h3>
@@ -2276,7 +1948,7 @@
         <ol>
           <li>O dinheiro iria direto para a conta do golpista.</li>
           <li>O “ganhador” e os comentários seriam falsos.</li>
-          <li>A transmissão (ou o número) desapareceria depois.</li>
+          <li>A transmissão desapareceria depois.</li>
           <li>Recuperar o valor seria difícil — por isso, prevenir é melhor.</li>
         </ol>
         <p><b>Se acontecer:</b> ligue já para o banco e peça o MED, guarde as provas e faça um B.O.</p>
